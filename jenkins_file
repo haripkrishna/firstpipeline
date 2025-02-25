@@ -11,28 +11,30 @@ pipeline {
         }
         stage('Set up Environment') {
             steps {
-                sh '''
-                source ~/anaconda3/etc/profile.d/conda.sh
-                conda activate DevOpsMyVirtual
-                pip install -r requirements.txt
-                '''
+                // Windows batch commands for Conda
+                bat """
+                    call C:\\Users\\%USERNAME%\\anaconda3\\Scripts\\activate.bat
+                    call conda activate %CONDA_ENV%
+                    pip install -r requirements.txt
+                """
             }
         }
         stage('Run Tests') {
-            steps {
+             steps {
                 script {
-                    def pytestExists = sh(script: '''
-                    source ~/anaconda3/etc/profile.d/conda.sh
-                    conda activate $CONDA_ENV
-                    conda list pytest | grep pytest || echo "notfound"
-                    ''', returnStdout: true).trim() != "notfound"
+                    // Check if pytest exists in the environment
+                    def pytestExists = bat(script: """
+                        call C:\\Users\\%USERNAME%\\anaconda3\\Scripts\\activate.bat
+                        call conda activate %CONDA_ENV%
+                        conda list pytest | findstr pytest
+                    """, returnStatus: true) == 0
                     
                     if (pytestExists) {
-                        sh '''
-                        source ~/anaconda3/etc/profile.d/conda.sh
-                        conda activate $CONDA_ENV
-                        pytest
-                        '''
+                        bat """
+                            call C:\\Users\\%USERNAME%\\anaconda3\\Scripts\\activate.bat
+                            call conda activate %CONDA_ENV%
+                            pytest
+                        """
                     } else {
                         echo 'Skipping tests: pytest not installed'
                     }
