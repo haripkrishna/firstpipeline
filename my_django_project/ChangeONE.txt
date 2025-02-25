@@ -1,1 +1,1 @@
-My FIRST Change in DJANGO project
+My SECOND Change in DJANGO project
