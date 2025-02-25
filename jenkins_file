@@ -13,8 +13,8 @@ pipeline {
             steps {
                 // Windows batch commands for Conda
                 bat """
-                    call C:\\Users\\%USERNAME%\\anaconda3\\Scripts\\activate.bat
-                    call conda activate %CONDA_ENV%
+                    call C:\\Users\\hari1\\anaconda3\\Scripts\\activate.bat
+                    call conda activate DevOpsMyVirtual
                     pip install -r requirements.txt
                 """
             }
@@ -24,15 +24,15 @@ pipeline {
                 script {
                     // Check if pytest exists in the environment
                     def pytestExists = bat(script: """
-                        call C:\\Users\\%USERNAME%\\anaconda3\\Scripts\\activate.bat
-                        call conda activate %CONDA_ENV%
+                        call C:\\Users\\hari1\\anaconda3\\Scripts\\activate.bat
+                        call conda activate DevOpsMyVirtual
                         conda list pytest | findstr pytest
                     """, returnStatus: true) == 0
                     
                     if (pytestExists) {
                         bat """
-                            call C:\\Users\\%USERNAME%\\anaconda3\\Scripts\\activate.bat
-                            call conda activate %CONDA_ENV%
+                            call C:\\Users\\hari1\\anaconda3\\Scripts\\activate.bat
+                            call conda activate DevOpsMyVirtual
                             pytest
                         """
                     } else {
